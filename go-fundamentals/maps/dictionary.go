@@ -1,7 +1,7 @@
 package main
 
-type Directory map[string]string
+type Dictionary map[string]string
 
-func (d Directory) Search(word string) string {
+func (d Dictionary) Search(word string) string {
 	return d[word]
 }
