@@ -1,5 +1,7 @@
 package main
 
-func Search(directory map[string]string, word string) string {
-	return directory[word]
+type Directory map[string]string
+
+func (d Directory) Search(word string) string {
+	return d[word]
 }
