@@ -54,7 +54,7 @@ func assertError(t *testing.T, got, want error) {
 	t.Helper()
 
 	if got != want {
-		t.Errorf("got %q want %q", got, want)
+		t.Errorf("got error %q want %q", got, want)
 	}
 	if got == nil {
 		if want == nil {
