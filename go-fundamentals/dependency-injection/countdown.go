@@ -1,5 +1,10 @@
 package main
 
-import "bytes"
+import (
+	"bytes"
+	"fmt"
+)
 
-func Countdown(out *bytes.Buffer) {}
+func Countdown(out *bytes.Buffer) {
+	fmt.Fprint(out, "3")
+}
