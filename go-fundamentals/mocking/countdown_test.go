@@ -53,11 +53,6 @@ func (s *SpySleeper) Sleep() {
 	s.Calls++
 }
 
-type ConfiguableSleeper struct {
-	duration time.Duration
-	sleep    func(time.Duration)
-}
-
 type SpyTime struct {
 	durationSlept time.Duration
 }
