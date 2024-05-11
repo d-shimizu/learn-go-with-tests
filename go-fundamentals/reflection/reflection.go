@@ -3,10 +3,14 @@ package main
 import "reflect"
 
 func walk(x interface{}, fn func(input string)) {
-	val := reflect.ValueOf(x)
+	val := getValue(x)
 
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem()
+	// If the value is a slice, iterate over each element and call walk on it
+	if val.Kind() == reflect.Slice {
+		for i := 0; i < val.Len(); i++ {
+			walk(val.Index(i).Interface(), fn)
+		}
+		return
 	}
 
 	for i := 0; i < val.NumField(); i++ {
