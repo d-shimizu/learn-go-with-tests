@@ -23,10 +23,11 @@ func TestCounter(t *testing.T) {
 		wg.Add(wantedCount)
 
 		for i := 0; i < wantedCount; i++ {
-			go func(w *sync.WaitGroup) {
+			//go func(w *sync.WaitGroup) {
+			go func() {
 				counter.Inc()
-				w.Done()
-			}(&wg)
+				wg.Done()
+			}()
 		}
 		wg.Wait()
 		assertCounter(t, counter, wantedCount)
@@ -35,7 +36,7 @@ func TestCounter(t *testing.T) {
 
 func assertCounter(t *testing.T, got Counter, want int) {
 	t.Helper()
-	if got.Value() != 3 {
+	if got.Value() != want {
 		t.Errorf("got %d, want %d", got.Value(), 3)
 	}
 }
