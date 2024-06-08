@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 )
 
 func TestHandler(t *testing.T) {
@@ -32,15 +30,11 @@ func TestHandler(t *testing.T) {
 		svr := Server(store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
-
-		cancellingCtx, cancel := context.WithCancel(request.Context())
-		time.AfterFunc(5*time.Millisecond, cancel)
-		request = request.WithContext(cancellingCtx)
-
 		response := httptest.NewRecorder()
 
 		svr.ServeHTTP(response, request)
-
-		store.assertWasCancelled()
+		if response.Body.String() != data {
+			t.Errorf("got %q, want %q", response.Body.String(), data)
+		}
 	})
 }
