@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func TestHandler(t *testing.T) {
@@ -14,15 +16,18 @@ func TestHandler(t *testing.T) {
 		svr := Server(store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
-		response := httptest.NewRecorder()
+
+		cancellingCtx, cancel := context.WithCancel(request.Context())
+		time.AfterFunc(5*time.Millisecond, cancel)
+		request = request.WithContext(cancellingCtx)
+
+		response := &SpyResponseWriter{}
 
 		svr.ServeHTTP(response, request)
 
-		if response.Body.String() != data {
-			t.Errorf(`got "%s", want "%s"`, response.Body.String(), data)
+		if response.written {
+			t.Error("a response should not have been written")
 		}
-
-		store.assertWasNotCancelled()
 	})
 
 	t.Run("returns data from store", func(t *testing.T) {
