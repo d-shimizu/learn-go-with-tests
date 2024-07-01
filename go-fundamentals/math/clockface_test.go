@@ -3,6 +3,8 @@ package clockface_test
 import (
 	"testing"
 	"time"
+
+	"github.com/d-shimizu/learn-go-with-tests/go-fundamentals/math/clockface"
 )
 
 func TestSecondHandAtMidnight(t *testing.T) {
