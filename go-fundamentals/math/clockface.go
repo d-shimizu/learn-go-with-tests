@@ -21,3 +21,11 @@ func secondHandPoint(t time.Time) Point {
 
 	return Point{x, y}
 }
+
+func SecondHand(t time.Time) Point {
+	p := secondHandPoint(t)
+	p = Point{p.X * 90, p.Y * 90}   // scale
+	p = Point{p.X, -p.Y}            // flip
+	p = Point{p.X + 150, p.Y + 150} // translate
+	return p
+}
