@@ -2,8 +2,10 @@ package clockface
 
 import (
 	"math"
+	"strings"
 	"testing"
 	"time"
+	//"github.com/d-shimizu/learn-go-with-tests/go-fundamentals/math/clockface"
 )
 
 func TestSecondHandAt30Seconds(t *testing.T) {
@@ -73,4 +75,18 @@ func roughlyEqualPoint(a, b Point) bool {
 func roughlyEqualFloat64(a, b float64) bool {
 	const equalityThreshold = 1e-7 // 1×10の7乗
 	return math.Abs(a-b) < equalityThreshold
+}
+
+func TestSVGWriter(t *testing.T) {
+	tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
+
+	var b strings.Builder
+	clockface.SVGWriter(&b, tm)
+	got := b.String()
+
+	want := `<line x1="150" y1="150" x2="150" y2="60"`
+
+	if !strings.Contains(got, want) {
+		t.Errorf("Expected to find the second hand %v, in the SVG output %v", want, got)
+	}
 }
