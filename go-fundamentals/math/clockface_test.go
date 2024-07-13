@@ -1,8 +1,9 @@
 package clockface
 
 import (
+	"bytes"
+	"encoding/xml"
 	"math"
-	"strings"
 	"testing"
 	"time"
 	//"github.com/d-shimizu/learn-go-with-tests/go-fundamentals/math/clockface"
@@ -80,13 +81,18 @@ func roughlyEqualFloat64(a, b float64) bool {
 func TestSVGWriter(t *testing.T) {
 	tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
 
-	var b strings.Builder
-	clockface.SVGWriter(&b, tm)
-	got := b.String()
+	b := bytes.Buffer{}
+	SVGWriter(&b, tm)
 
-	want := `<line x1="150" y1="150" x2="150" y2="60"`
+	svg := Svg{}
+	xml.Unmarshal(b.Bytes(), &svg)
 
-	if !strings.Contains(got, want) {
-		t.Errorf("Expected to find the second hand %v, in the SVG output %v", want, got)
+	x2 := "150.000"
+	y2 := "60.000"
+
+	for _, line := range svg.Line {
+		if line.X2 == x2 && line.Y2 == y2 {
+			return
+		}
 	}
 }
