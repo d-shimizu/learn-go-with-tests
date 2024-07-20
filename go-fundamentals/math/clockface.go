@@ -88,3 +88,8 @@ const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 const bezel = `<circle cx="150" cy="150" r="100" style="fill:#fff;stroke:#000;stroke-width:5px;"/>`
 
 const svgEnd = `</svg>`
+
+func minutesInRadians(t time.Time) float64 {
+	return (secondsInRadians(t) / 60) +
+		(math.Pi / (30 / float64(t.Minute())))
+}

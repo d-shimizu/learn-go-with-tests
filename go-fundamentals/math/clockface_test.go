@@ -162,7 +162,11 @@ func TestSVGWriterMinutedHand(t *testing.T) {
 	}{
 		{
 			simpleTime(0, 0, 0),
-			Line{150, 150, 150, 70},
+			Line{150, 150, 150, 60},
+		},
+		{
+			simpleTime(0, 0, 30),
+			Line{150, 150, 150, 240},
 		},
 	}
 
@@ -187,7 +191,7 @@ func TestMinutesInRadians(t *testing.T) {
 		angle float64
 	}{
 		{simpleTime(0, 30, 0), math.Pi},
-		{simpleTime(0, 0, 7), 7 * (math.Pi / (30 * 30))},
+		{simpleTime(0, 0, 7), 7 * (math.Pi / (30 * 60))},
 	}
 
 	for _, c := range cases {
