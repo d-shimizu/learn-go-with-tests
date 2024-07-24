@@ -90,7 +90,7 @@ func minutesInRadians(t time.Time) float64 {
 		(math.Pi / (30 / float64(t.Minute())))
 }
 
-func minuiteHandPoint(t time.Time) Point {
+func minuteHandPoint(t time.Time) Point {
 	return angleToPoint(minutesInRadians(t))
 }
 
