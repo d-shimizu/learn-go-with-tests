@@ -99,6 +99,10 @@ func makeHand(p Point, length float64) Point {
 	return Point{p.X + clockCenterX, p.Y + clockCenterY}
 }
 
+func hoursInRadians(t time.Time) float64 {
+	return (math.Pi / (6 / float64(t.Hour())))
+}
+
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg"
