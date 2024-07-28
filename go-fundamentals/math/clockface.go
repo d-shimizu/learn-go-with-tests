@@ -100,7 +100,7 @@ func makeHand(p Point, length float64) Point {
 }
 
 func hoursInRadians(t time.Time) float64 {
-	return (math.Pi / (6 / float64(t.Hour()%12)))
+	return (minutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
 }
 
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

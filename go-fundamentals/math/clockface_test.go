@@ -262,7 +262,7 @@ func TestHoursInRadians(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			got := hoursInRadians(c.time)
-			if got != c.angle {
+			if !roughlyEqualFloat64(got, c.angle) {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
 		})
