@@ -92,9 +92,11 @@ func TestStoreWins(t *testing.T) {
 }
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := InMemoryPlayerStore{}
-	// PlayerServer に InMemoryPlayerStore を埋め込む
-	server := PlayerServer{&store}
+	// NewInMemoryPlayerStore
+	// この関数は、InMemoryPlayerStoreのインスタンスを返す
+	store := NewInMemoryPlayerStore()
+	// PlayerServer はプレイヤーのスコアを取得するための構造体
+	server := PlayerServer{store}
 
 	player := "Pepper"
 
