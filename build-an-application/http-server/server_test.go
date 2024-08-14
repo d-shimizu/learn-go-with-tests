@@ -79,14 +79,35 @@ func TestStoreWins(t *testing.T) {
 
 		assertStatus(t, response.Code, http.StatusAccepted)
 
+		// winCallsの長さが1であることを確認する
 		if len(store.winCalls) != 1 {
 			t.Fatalf("got %d calls to RecordWin want %d", len(store.winCalls), 1)
 		}
 
+		// winCallsに正しいプレイヤー名が格納されていることを確認する
 		if store.winCalls[0] != player {
 			t.Errorf("did not store correct winner got %q want %q", store.winCalls[0], player)
 		}
 	})
+}
+
+func TestRecordingWinsAndRetrievingThem(t *testing.T) {
+	store := InMemoryPlayerStore{}
+	// PlayerServer に InMemoryPlayerStore を埋め込む
+	server := PlayerServer{&store}
+
+	player := "Pepper"
+
+	// POSTリクエストを送信して3つの勝利を記録する
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+
+	response := httptest.NewRecorder()
+	server.ServeHTTP(response, newGetScoreRequest(player))
+	assertStatus(t, response.Code, http.StatusOK)
+
+	assertResponseBody(t, response.Body.String(), "3")
 }
 
 func newPostWinRequest(name string) *http.Request {
