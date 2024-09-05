@@ -17,7 +17,7 @@ func (i *InMemoryPlayerStore) GetLeague() []Player {
 	return league
 }
 
-func (i *InMemoryPlayerStore) RecorderWin(name string) {
+func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.store[name]++
 }
 

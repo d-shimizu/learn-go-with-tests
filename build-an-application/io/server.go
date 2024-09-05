@@ -38,6 +38,10 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	// /league にアクセスがあった場合は p.leagueHandler を呼び出す
 	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
 	router.Handle("/players/", http.HandlerFunc(p.playersHandler))
+
+	p.Handler = router
+
+	return p
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
