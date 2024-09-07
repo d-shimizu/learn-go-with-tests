@@ -26,3 +26,7 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	}
 	return wins
 }
+
+func (t *FileSystemPlayerStore) RecordWin(name string) {
+
+}
