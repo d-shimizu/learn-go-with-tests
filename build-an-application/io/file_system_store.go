@@ -15,5 +15,14 @@ func (f *FileSystemPlayerStore) GetLeague() []Player {
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
-	return 0
+	var wins int
+
+	// リーグを取得してプレイヤーの勝利数を取得する
+	for _, player := range f.GetLeague() {
+		if player.Name == name {
+			wins = player.Wins
+			break
+		}
+	}
+	return wins
 }
