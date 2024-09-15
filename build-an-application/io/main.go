@@ -3,9 +3,24 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
+const dbFileName = "game.db.json"
+
 func main() {
-	server := NewPlayerServer(NewInMemoryPlayerStore())
-	log.Fatal(http.ListenAndServe(":5000", server))
+	// OpenFile is used to open a file for reading, writing, or both.
+	db, err := os.OpenFile(dbFileName, os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalf("problem opening %s %v", dbFileName, err)
+	}
+
+	// FileSystemPlayerStore is a struct that contains a ReadWriteSeeker
+	store := &FileSystemPlayerStore{db}
+	// NewPlayerServer returns a new PlayerServer with a FileSystemPlayerStore
+	server := NewPlayerServer(store)
+
+	if err := http.ListenAndServe(":5000", server); err != nil {
+		log.Fatalf("could not listen on port 5000 %v", err)
+	}
 }
