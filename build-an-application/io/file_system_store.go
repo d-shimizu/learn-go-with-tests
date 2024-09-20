@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 )
@@ -12,14 +13,18 @@ type FileSystemPlayerStore struct {
 }
 
 // NewFileSystemPlayerStore は、ファイルシステムを使ったプレイヤーストアを生成する
-func NewFileSystemPlayerStore(file *os.File) *FileSystemPlayerStore {
+func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 	file.Seek(0, io.SeekStart)
-	league, _ := NewLeague(file)
+	league, err := NewLeague(file)
+
+	if err != nil {
+		return nil, fmt.Errorf("problem loading player store from file %s, %v", file.Name(), err)
+	}
 
 	return &FileSystemPlayerStore{
 		database: json.NewEncoder(&tape{file}),
 		league:   league,
-	}
+	}, nil
 }
 
 // GetLeague は、リーグ情報を取得する
