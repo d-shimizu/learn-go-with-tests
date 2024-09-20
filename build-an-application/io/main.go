@@ -16,7 +16,10 @@ func main() {
 	}
 
 	// FileSystemPlayerStore is a struct that contains a ReadWriteSeeker
-	store := NewFileSystemPlayerStore(db)
+	store, err := NewFileSystemPlayerStore(db)
+	if err != nil {
+		log.Fatalf("problem creating file system player store, %v ", err)
+	}
 	// NewPlayerServer returns a new PlayerServer with a FileSystemPlayerStore
 	server := NewPlayerServer(store)
 
