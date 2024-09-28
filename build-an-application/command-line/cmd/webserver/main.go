@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	poker "github.com/d-shimizu/learn-go-with-test/build-an-application"
 )
 
 const dbFileName = "game.db.json"
@@ -16,12 +18,12 @@ func main() {
 	}
 
 	// FileSystemPlayerStore is a struct that contains a ReadWriteSeeker
-	store, err := NewFileSystemPlayerStore(db)
+	store, err := poker.NewFileSystemPlayerStore(db)
 	if err != nil {
 		log.Fatalf("problem creating file system player store, %v ", err)
 	}
 	// NewPlayerServer returns a new PlayerServer with a FileSystemPlayerStore
-	server := NewPlayerServer(store)
+	server := poker.NewPlayerServer(store)
 
 	if err := http.ListenAndServe(":5000", server); err != nil {
 		log.Fatalf("could not listen on port 5000 %v", err)
