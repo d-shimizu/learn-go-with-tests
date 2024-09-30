@@ -10,5 +10,5 @@ type CLI struct {
 }
 
 func (cli *CLI) PlayPoker() {
-	cli.playerStore.RecordWin("Cleo")
+	cli.playerStore.RecordWin("Chris")
 }
