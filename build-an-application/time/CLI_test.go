@@ -4,7 +4,15 @@ import (
 	poker "learn-go-with-test/build-an-application"
 	"strings"
 	"testing"
+	"time"
 )
+
+type SpyBlindAlerter struct {
+	alerts []struct {
+		scheduledAt time.Duration
+		amount      int
+	}
+}
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
@@ -40,4 +48,11 @@ func TestCLI(t *testing.T) {
 			t.Fatalf("expected a blind alert to be scheduled")
 		}
 	})
+}
+
+func (s *SpyBindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
+	s.alerts = append(s.alerts, struct {
+		scheduledAt time.Duration
+		amount      int
+	}{duration, amount})
 }
