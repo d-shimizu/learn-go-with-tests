@@ -14,13 +14,16 @@ type SpyBlindAlerter struct {
 	}
 }
 
+var dummySpyAlerter = &SpyBlindAlerter{}
+
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
+
 		in := strings.NewReader("Chris wins\n")
 		playerStore := &poker.StubPlayerStore{}
 
 		// コンストラクタを使ってCLIを作成
-		cli := poker.NewCLI(playerStore, in)
+		cli := poker.NewCLI(playerStore, in, dummySpyAlerter)
 		cli.PlayPoker()
 
 		poker.AssertPlayerWin(t, playerStore, "Chris")
@@ -30,7 +33,7 @@ func TestCLI(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
 		playerStore := &poker.StubPlayerStore{}
 
-		cli := poker.NewCLI(playerStore, in)
+		cli := poker.NewCLI(playerStore, in, dummySpyAlerter)
 		cli.PlayPoker()
 
 		poker.AssertPlayerWin(t, playerStore, "Cleo")
@@ -50,7 +53,7 @@ func TestCLI(t *testing.T) {
 	})
 }
 
-func (s *SpyBindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
+func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 	s.alerts = append(s.alerts, struct {
 		scheduledAt time.Duration
 		amount      int
