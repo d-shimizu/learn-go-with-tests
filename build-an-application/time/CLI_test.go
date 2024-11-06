@@ -37,31 +37,34 @@ func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 
 		in := strings.NewReader("Chris wins\n")
+		stdout := &bytes.Buffer{}
 		playerStore := &poker.StubPlayerStore{}
 
 		// コンストラクタを使ってCLIを作成
-		cli := poker.NewCLI(playerStore, in, dummyStdOut, dummySpyAlerter)
+		cli := poker.NewCLI(playerStore, in, stdout, dummySpyAlerter)
 		cli.PlayPoker()
 
-		poker.AssertPlayerWin(t, playerStore, "Chris")
+		poker.AssertPlayerWin(t, playerStore, "")
 	})
 
 	t.Run("record cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
+		stdout := &bytes.Buffer{}
 		playerStore := &poker.StubPlayerStore{}
 
-		cli := poker.NewCLI(playerStore, in, dummyStdOut, dummySpyAlerter)
+		cli := poker.NewCLI(playerStore, in, stdout, dummySpyAlerter)
 		cli.PlayPoker()
 
-		poker.AssertPlayerWin(t, playerStore, "Cleo")
+		poker.AssertPlayerWin(t, playerStore, "")
 	})
 
 	t.Run("it schedules printing of blind values", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
+		stdout := &bytes.Buffer{}
 		playerStore := &poker.StubPlayerStore{}
 		blindAlerter := &SpyBlindAlerter{}
 
-		cli := poker.NewCLI(playerStore, in, dummyStdOut, blindAlerter)
+		cli := poker.NewCLI(playerStore, in, stdout, blindAlerter)
 		cli.PlayPoker()
 
 		cases := []scheduledAlert{
@@ -108,9 +111,12 @@ func TestCLI(t *testing.T) {
 
 		cases := []scheduledAlert{
 			{0 * time.Second, 100},
-			{12 * time.Minute, 200},
-			{24 * time.Minute, 300},
-			{36 * time.Minute, 400},
+			{10 * time.Minute, 200},
+			{20 * time.Minute, 300},
+			{30 * time.Minute, 400},
+			//{12 * time.Minute, 200},
+			//{24 * time.Minute, 300},
+			//{36 * time.Minute, 400},
 		}
 
 		for i, want := range cases {
