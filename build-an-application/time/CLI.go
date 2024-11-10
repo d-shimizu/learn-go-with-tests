@@ -10,32 +10,35 @@ import (
 )
 
 type CLI struct {
-	playerStore PlayerStore
-	in          *bufio.Scanner
-	out         io.Writer
-	alerter     BlindAlerter
+	in   *bufio.Scanner
+	out  io.Writer
+	game *Game
 }
 
 const PlayerPrompt = "Please enter the number of players: "
 
 func NewCLI(store PlayerStore, in io.Reader, out io.Writer, alerter BlindAlerter) *CLI {
 	return &CLI{
-		playerStore: store,
-		in:          bufio.NewScanner(in),
-		out:         out,
-		alerter:     alerter,
+		in:  bufio.NewScanner(in),
+		out: out,
+		game: &Game{
+			alerter: alerter,
+			store:   store,
+		},
 	}
 }
 
 func (cli *CLI) PlayPoker() {
 	fmt.Fprint(cli.out, PlayerPrompt)
 
-	numberOfPlayers, _ := strconv.Atoi(cli.readLine())
-	// cli.scheduleBlindAlerts()
-	cli.scheduleBlindAlerts(numberOfPlayers)
+	numberOfPlayerInput := cli.readLine()
+	numberOfPlayers, _ := strconv.Atoi(strings.Trim(numberOfPlayerInput, "\n"))
 
-	userInput := cli.readLine()
-	cli.playerStore.RecordWin(extractWinner(userInput))
+	cli.game.Start(numberOfPlayers)
+
+	winnerInput := cli.readLine()
+	winner := extractWinner(winnerInput)
+	cli.game.Finish(winner)
 }
 
 func extractWinner(userInput string) string {
