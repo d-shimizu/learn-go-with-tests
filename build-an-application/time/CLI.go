@@ -17,14 +17,11 @@ type CLI struct {
 
 const PlayerPrompt = "Please enter the number of players: "
 
-func NewCLI(store PlayerStore, in io.Reader, out io.Writer, alerter BlindAlerter) *CLI {
+func NewCLI(in io.Reader, out io.Writer, game *Game) *CLI {
 	return &CLI{
-		in:  bufio.NewScanner(in),
-		out: out,
-		game: &Game{
-			alerter: alerter,
-			store:   store,
-		},
+		in:   bufio.NewScanner(in),
+		out:  out,
+		game: game,
 	}
 }
 
@@ -58,7 +55,7 @@ func (cli *CLI) scheduleBlindAlerts(numberOfPlayers int) {
 	blindTime := 0 * time.Second
 	//blindTime := 5 * time.Minute
 	for _, blind := range blinds {
-		cli.alerter.ScheduleAlertAt(blindTime, blind)
+		cli.game.alerter.ScheduleAlertAt(blindTime, blind)
 		blindTime = blindTime + blindIncrement
 	}
 }
