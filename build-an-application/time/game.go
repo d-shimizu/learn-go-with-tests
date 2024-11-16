@@ -2,23 +2,30 @@ package poker
 
 import "time"
 
-type Game struct {
+type Game interface {
+	Start(numberOfPlayers int)
+	Finish(winner string)
+}
+
+type GameSpy struct {
 	alerter BlindAlerter
 	store   PlayerStore
 }
 
-func NewGame(alerter BlindAlerter, store PlayerStore) *Game {
-	return &Game{
+func NewGame(alerter BlindAlerter, store PlayerStore) *GameSpy {
+	return &GameSpy{
 		alerter: alerter,
 		store:   store,
 	}
 }
 
-func (p *Game) Start(numberOfPlayers int) {
-	blindIncrement := time.Duration(5+numberOfPlayers) + time.Minute
+func (p *GameSpy) Start(numberOfPlayers int) {
+	blindIncrement := time.Duration(10+numberOfPlayers) * time.Minute
 
 	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
 	blindTime := 0 * time.Second
+	//blindTime := time.Duration(5 * time.Minute)
+	//blindTime := 1 * time.Minute
 
 	for _, blind := range blinds {
 		p.alerter.ScheduleAlertAt(blindTime, blind)
@@ -26,6 +33,6 @@ func (p *Game) Start(numberOfPlayers int) {
 	}
 }
 
-func (p *Game) Finish(winner string) {
+func (p *GameSpy) Finish(winner string) {
 	p.store.RecordWin(winner)
 }
