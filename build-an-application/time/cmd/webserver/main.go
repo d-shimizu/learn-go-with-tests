@@ -17,10 +17,6 @@ func main() {
 	}
 	defer close()
 
-	//game := poker.NewGame(poker.BlindAlerterFunc(poker.StdOutAlerter), store)
-	//cli := poker.NewCLI(os.Stdin, os.Stdout, game)
-	//cli.PlayPoker()
-
 	server := poker.NewPlayerServer(store)
 
 	if err := http.ListenAndServe(":5000", server); err != nil {
